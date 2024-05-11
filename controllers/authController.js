@@ -29,7 +29,7 @@ export const registerController = async (req, res) => {
     const user = await userModel.create({ name, email, password });
     res
       .status(201)
-      .send({ success: true, message: "User created successFully", user });
+      .send({ success: true, message: "User created successfully", user });
   } catch (error) {
     console.log(error);
     res.status().send({
