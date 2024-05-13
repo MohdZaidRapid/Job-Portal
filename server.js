@@ -1,6 +1,7 @@
 // package imports
 import express from "express";
 import dotnev from "dotenv";
+import 'express-async-errors'
 import colors from "colors";
 import cors from "cors";
 import morgan from "morgan";
