@@ -5,7 +5,10 @@ import "express-async-errors";
 import colors from "colors";
 import cors from "cors";
 import morgan from "morgan";
-
+//security packages
+import helmet from "helmet";
+import xss from "xss-clean";
+//files imports
 import connectDB from "./config/db.js";
 
 import testRoutes from "./routes/testRoutes.js";
@@ -24,6 +27,8 @@ connectDB();
 const app = express();
 
 //middleware
+app.use(helmet());
+app.use(xss());
 app.use(express.json());
 app.use(cors());
 app.use(morgan("dev"));
