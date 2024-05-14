@@ -52,6 +52,9 @@ export const getAllJobsController = async (req, res, next) => {
   if (sort === "A-Z") {
     queryResult = queryResult.sort("-position");
   }
+  if (sort === "z-a") {
+    queryResult = queryResult.sort("-position");
+  }
   const jobs = await queryResult;
 
   //   const jobs = await jobsModel.find({ createdBy: req.user.userId });
