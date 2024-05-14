@@ -40,7 +40,7 @@ export const loginController = async (req, res, next) => {
   // find user by email
   const user = await userModel.findOne({ email }).select("+password");
   if (!user) {
-    next("Invalid Username or password");
+    next("No User found");
   }
 
   // compare password
