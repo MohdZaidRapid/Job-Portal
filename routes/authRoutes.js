@@ -23,44 +23,72 @@ const router = express.Router();
 /**
  * @swagger
  * components:
- *  schemas:
- *    User:
- *      type: object
- *      required:
- *        - name
- *        - lastName
- *        - email
- *        - password
- *        - location
- *      properties:
- *        id:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       required:
+ *         - name
+ *         - lastName
+ *         - email
+ *         - password
+ *       properties:
+ *         id:
  *           type: string
  *           description: The Auto-generated id of user collection
- *        name:
+ *         name:
  *           type: string
- *           description: user name
- *        lastName:
+ *           description: User name
+ *         lastName:
  *           type: string
- *           description: User Last Name
- *        email:
+ *           description: User last name
+ *         email:
  *           type: string
  *           description: User email address
- *        password:
+ *         password:
  *           type: string
  *           description: User password >6 characters
- *        location:
+ *         location:
  *           type: string
- *           description: user location city or country
- *        exmaple:
- *           id: DSREGFDTRGFGFG
- *           name: John
- *           lastName: Doe
- *           email: johndoe@gmail.com
- *           password: test@123
- *           location: mumbai
- *
- *
+ *           description: User location city or country
+ *       example:
+ *         id: DSREGFDTRGFGFG
+ *         name: John
+ *         lastName: Doe
+ *         email: johndoe@gmail.com
+ *         password: test@123
+ *         location: Mumbai
  */
+
+/**
+ *  @swagger
+ *  tags:
+ *    name: auth
+ *    description: authentication apis
+ */
+
+/**
+ * @swagger
+ * /api/v1/auth/register:
+ *   post:
+ *     summary: Register new user
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       200:
+ *         description: User created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       500:
+ *         description: Internal server error
+ */
+
 
 // REGISTERED || POST
 router.post("/register", limiter, registerController);
