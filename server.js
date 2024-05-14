@@ -1,14 +1,17 @@
 // package imports
 import express from "express";
 import dotnev from "dotenv";
-import 'express-async-errors'
+import "express-async-errors";
 import colors from "colors";
 import cors from "cors";
 import morgan from "morgan";
+
 import connectDB from "./config/db.js";
+
 import testRoutes from "./routes/testRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import errorMiddlware from "./middlewares/errorMiddleware.js";
+import userRoutes from "./routes/userRoutes.js";
 
 // configure
 dotnev.config();
@@ -27,9 +30,10 @@ app.use(morgan("dev"));
 // routes
 app.use("/api/v1/test", testRoutes);
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/user", userRoutes);
 
 // validation middleware
-app.use(errorMiddlware); 
+app.use(errorMiddlware);
 
 // PORT
 const PORT = process.env.PORT || 8080;
