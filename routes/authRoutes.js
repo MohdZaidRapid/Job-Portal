@@ -89,9 +89,31 @@ const router = express.Router();
  *         description: Internal server error
  */
 
-
 // REGISTERED || POST
 router.post("/register", limiter, registerController);
+
+/**
+ * @swagger
+ * /api/v1/auth/login:
+ *   post:
+ *     summary: Login page
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       500:
+ *         description: Something went wrong
+ */
 
 // LOGIN || POST
 router.post("/login", limiter, loginController);
