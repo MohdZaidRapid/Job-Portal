@@ -20,6 +20,48 @@ const router = express.Router();
 
 // routes
 
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *    User:
+ *      type: object
+ *      required:
+ *        - name
+ *        - lastName
+ *        - email
+ *        - password
+ *        - location
+ *      properties:
+ *        id:
+ *           type: string
+ *           description: The Auto-generated id of user collection
+ *        name:
+ *           type: string
+ *           description: user name
+ *        lastName:
+ *           type: string
+ *           description: User Last Name
+ *        email:
+ *           type: string
+ *           description: User email address
+ *        password:
+ *           type: string
+ *           description: User password >6 characters
+ *        location:
+ *           type: string
+ *           description: user location city or country
+ *        exmaple:
+ *           id: DSREGFDTRGFGFG
+ *           name: John
+ *           lastName: Doe
+ *           email: johndoe@gmail.com
+ *           password: test@123
+ *           location: mumbai
+ *
+ *
+ */
+
 // REGISTERED || POST
 router.post("/register", limiter, registerController);
 
