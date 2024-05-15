@@ -1,5 +1,4 @@
 const errroMiddelware = (err, req, res, next) => {
-  console.log(err);
   const defaultErrors = {
     statusCode: 500,
     message: err,
