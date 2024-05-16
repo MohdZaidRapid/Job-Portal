@@ -5,6 +5,8 @@ import {
 } from "../controllers/authController.js";
 
 import rateLimit from "express-rate-limit";
+import { forgotPasswordController } from "../controllers/forgotPasswordController.js";
+import { resetPasswordController } from "../controllers/passworResetController.js";
 
 // ip limiter
 const limiter = rateLimit({
@@ -117,5 +119,7 @@ router.post("/register", limiter, registerController);
 
 // LOGIN || POST
 router.post("/login", limiter, loginController);
+router.post("/forgot-password", forgotPasswordController);
+router.post("/reset-password",  resetPasswordController);
 
 export default router;

@@ -2,28 +2,28 @@ import mongoose from "mongoose";
 import validator from "validator";
 import bcrypt from "bcryptjs";
 import JWT from "jsonwebtoken";
+import crypto from "crypto";
 import moment from "moment";
 
-// schema
 const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      require: [true, "Name is required"],
+      required: [true, "Name is required"],
     },
     lastName: {
       type: String,
     },
     email: {
       type: String,
-      require: [true, "Email is required"],
+      required: [true, "Email is required"],
       unique: true,
       validate: validator.isEmail,
     },
     password: {
       type: String,
-      required: [true, "password is required"],
-      minLength: [6, "Password length should be greater than 6 character "],
+      required: [true, "Password is required"],
+      minLength: [6, "Password length should be greater than 6 characters"],
       select: true,
     },
     location: {
@@ -33,24 +33,23 @@ const userSchema = new mongoose.Schema(
     role: {
       type: String,
       enum: ["admin", "recruiter", "applicant"],
-      default: "applicant", // Default role for new users
+      default: "applicant",
     },
     resetToken: String,
     resetTokenExpiresAt: Date,
   },
   { timestamps: true }
 );
-// middleware
-userSchema.pre("save", async function () {
-  if (!this.isModified) return next();
+
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
+  next();
 });
 
-// compare password
 userSchema.methods.comparePassword = async function (userPassword) {
-  const isMatch = await bcrypt.compare(userPassword, this.password);
-  return isMatch;
+  return await bcrypt.compare(userPassword, this.password);
 };
 
 userSchema.methods.isPasswordResetTokenValid = function (token) {
@@ -59,11 +58,17 @@ userSchema.methods.isPasswordResetTokenValid = function (token) {
   );
 };
 
-// JSON WEBTOKEN
 userSchema.methods.createJWT = function () {
   return JWT.sign({ userId: this._id }, process.env.JWT_SECRET, {
     expiresIn: "1d",
   });
+};
+
+userSchema.methods.generatePasswordResetToken = function () {
+  const resetToken = crypto.randomBytes(32).toString("hex");
+  this.resetToken = resetToken;
+  this.resetTokenExpiresAt = moment().add(1, "hour").toDate();
+  return resetToken;
 };
 
 export default mongoose.model("User", userSchema);
