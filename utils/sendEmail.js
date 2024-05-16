@@ -1,7 +1,7 @@
 const nodemailer = require("nodemailer");
 
 // Create a transporter object using the default SMTP transport
-let transport = nodemailer.createTransport({
+let transporter = nodemailer.createTransport({
   host: "sandbox.smtp.mailtrap.io",
   port: 2525,
   auth: {
@@ -19,8 +19,6 @@ function sendPasswordResetEmail(email, resetLink) {
     text: `Click the following link to reset your password: ${resetLink}`,
     html: `<p>Click the following link to reset your password: <a href="${resetLink}">${resetLink}</a></p>`,
   });
-
-  console.log("Message sent: %s", info.messageId);
 }
 
 // Example usage
