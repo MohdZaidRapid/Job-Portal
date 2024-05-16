@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import validator from "validator";
 import bcrypt from "bcryptjs";
 import JWT from "jsonwebtoken";
+import moment from "moment";
 
 // schema
 const userSchema = new mongoose.Schema(
@@ -29,6 +30,13 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "India",
     },
+    role: {
+      type: String,
+      enum: ["admin", "recruiter", "applicant"],
+      default: "applicant", // Default role for new users
+    },
+    resetToken: String,
+    resetTokenExpiresAt: Date,
   },
   { timestamps: true }
 );
@@ -43,6 +51,12 @@ userSchema.pre("save", async function () {
 userSchema.methods.comparePassword = async function (userPassword) {
   const isMatch = await bcrypt.compare(userPassword, this.password);
   return isMatch;
+};
+
+userSchema.methods.isPasswordResetTokenValid = function (token) {
+  return (
+    token === this.resetToken && moment().isBefore(this.resetTokenExpiresAt)
+  );
 };
 
 // JSON WEBTOKEN
