@@ -1,16 +1,14 @@
 const nodemailer = require("nodemailer");
 
 // Create a transporter object using the default SMTP transport
-let transporter = nodemailer.createTransport({
-  host: "smtp.example.com",
-  port: 587,
-  secure: false, // true for 465, false for other ports
+let transport = nodemailer.createTransport({
+  host: "sandbox.smtp.mailtrap.io",
+  port: 2525,
   auth: {
-    user: "yourusername@example.com",
-    pass: "yourpassword",
+    user: "70d9cbdc4660c7",
+    pass: "65482f82ec9208",
   },
 });
-
 // Function to send password reset email
 function sendPasswordResetEmail(email, resetLink) {
   // Send mail with defined transport object
