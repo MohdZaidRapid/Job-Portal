@@ -24,6 +24,7 @@ import jobsRoutes from "./routes/jobsRoute.js";
 import userRoutes from "./routes/userRoutes.js";
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
+import feedBackRoutes from "./routes/feedbackRoutes.js";
 
 // configure
 dotnev.config();
@@ -89,6 +90,7 @@ app.use("/api/v1/test", testRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/job", jobsRoutes);
+app.use("/api/v1/feedback", feedBackRoutes);
 
 // homeroute root
 app.use("/api-doc", swaggerUi.serve, swaggerUi.setup(spec));

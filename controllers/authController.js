@@ -7,17 +7,6 @@ export const registerController = async (req, res, next) => {
 
   let imageUrl = "";
   const image = req.file;
-  if (image) {
-    console.log("image here");
-    try {
-      const result = await cloudinary.uploader.upload(image.path, {
-        folder: "user_images",
-      });
-      imageUrl = result.secure_url;
-    } catch (error) {
-      return next("Image upload failed", err);
-    }
-  }
 
   if (!name) {
     next("name is required");
@@ -28,8 +17,21 @@ export const registerController = async (req, res, next) => {
   if (!password) {
     next("password is required and greater than 6 character");
   }
+
+  if (image) {
+    try {
+      const result = await cloudinary.uploader.upload(image.path, {
+        folder: "user_images",
+      });
+      imageUrl = result.secure_url;
+    } catch (error) {
+      fs.unlink(image.path);
+      return next("Image upload failed", err);
+    }
+  }
   const existingUser = await userModel.findOne({ email });
   if (existingUser) {
+    fs.unlink(image.path);
     next("Email Already Registered Please Login");
   }
   const user = await userModel.create({

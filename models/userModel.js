@@ -40,6 +40,8 @@ const userSchema = new mongoose.Schema(
     image: {
       type: String, // URL to the image stored in Cloudinary
     },
+    feedback: [{ type: mongoose.Schema.Types.ObjectId, ref: "Feedback" }],
+    averageRating: { type: Number, default: 0 },
   },
   { timestamps: true }
 );
