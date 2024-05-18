@@ -7,6 +7,7 @@ import {
 import rateLimit from "express-rate-limit";
 import { forgotPasswordController } from "../controllers/forgotPasswordController.js";
 import { resetPasswordController } from "../controllers/passworResetController.js";
+import upload from "../middlewares/uploadMiddleware.js";
 
 // ip limiter
 const limiter = rateLimit({
@@ -92,7 +93,8 @@ const router = express.Router();
  */
 
 // REGISTERED || POST
-router.post("/register", limiter, registerController);
+router.post("/register", limiter, upload.single("image"), registerController);
+// upload.single('image')
 
 /**
  * @swagger
@@ -120,6 +122,6 @@ router.post("/register", limiter, registerController);
 // LOGIN || POST
 router.post("/login", limiter, loginController);
 router.post("/forgot-password", forgotPasswordController);
-router.post("/reset-password",  resetPasswordController);
+router.post("/reset-password", resetPasswordController);
 
 export default router;

@@ -2,6 +2,8 @@
 import swaggerUi from "swagger-ui-express";
 import swaggerDoc from "swagger-jsdoc";
 // packages import
+import http from "http";
+import { Server } from "socket.io";
 import express from "express";
 import dotnev from "dotenv";
 import "express-async-errors";
@@ -20,6 +22,8 @@ import authRoutes from "./routes/authRoutes.js";
 import errorMiddlware from "./middlewares/errorMiddleware.js";
 import jobsRoutes from "./routes/jobsRoute.js";
 import userRoutes from "./routes/userRoutes.js";
+import path, { dirname } from "path";
+import { fileURLToPath } from "url";
 
 // configure
 dotnev.config();
@@ -47,17 +51,38 @@ const options = {
 };
 
 const spec = swaggerDoc(options);
-
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 // rest object
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
+
+// Socket io
+io.on("connection", (socket) => {
+  console.log("New client connected");
+
+  socket.on("subscribeToNotifications", (userId) => {
+    console.log(`User ${userId} subscribed to notifications`);
+    socket.join(userId);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Client disconnected");
+  });
+});
 
 //middleware
+
 app.use(helmet());
 app.use(xss());
 app.use(mongoSanitize());
 app.use(express.json());
 app.use(cors());
 app.use(morgan("dev"));
+
+console.log(__dirname);
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // routes
 app.use("/api/v1/test", testRoutes);
@@ -74,8 +99,12 @@ app.use(errorMiddlware);
 // PORT
 const PORT = process.env.PORT || 8080;
 
+export const sendNotification = (userId, message) => {
+  io.to(userId).emit("notification", message);
+};
+
 // listen
-app.listen(8080, () => {
+server.listen(8080, () => {
   console.log(
     `Node Server Running In  ${process.env.DEV_MODE} Mode on port no ${PORT}`
       .bgCyan.white

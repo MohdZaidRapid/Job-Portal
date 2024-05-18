@@ -37,6 +37,9 @@ const userSchema = new mongoose.Schema(
     },
     resetToken: String,
     resetTokenExpiresAt: Date,
+    image: {
+      type: String, // URL to the image stored in Cloudinary
+    },
   },
   { timestamps: true }
 );
